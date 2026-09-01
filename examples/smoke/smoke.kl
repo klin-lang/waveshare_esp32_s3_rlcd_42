@@ -193,7 +193,7 @@ fn main() {
   let _ad = board.audio_deinit()
   let _mv = board.battery_mv()
   let _v = board.version()
-  if _v != 7 {
+  if _v != 8 {
     return
   }
 }

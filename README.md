@@ -9,11 +9,16 @@ Panel protocol lives in [`klin_st7305`](https://github.com/klin-lang/klin_st7305
 the ESP-IDF SPI bus, I2C master, pin map, TF SDMMC, battery ADC, audio I2S +
 codec bring-up, and thin sensor glue.
 
+**Wi‑Fi / BLE / ESP-NOW** are on the ESP32-S3 silicon — use separate packs
+([`esp_wifi`](https://github.com/klin-lang/esp_wifi) /
+[`esp_ble`](https://github.com/klin-lang/esp_ble) /
+[`espnow`](https://github.com/klin-lang/espnow)); not this board API.
+
 Klin issue
 [163](https://github.com/klin-lang/klin/blob/main/issues/163-board-waveshare-esp32-s3-rlcd-42.md) /
 chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st7305.md).
 
-## Status (`@v0.7.0`)
+## Status (`@v0.8.0`)
 
 | API | Notes |
 |---|---|
@@ -33,7 +38,7 @@ chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st
 | `audio_init` / `deinit` / `ready` / `pa_enable` / `set_volume` | ES8311 + ES7210 |
 | `audio_write` / `audio_read` | Caller PCM (`[]u8`); 16-bit stereo |
 
-`version()` → `7`.
+`version()` → `8`.
 
 ## Requirements
 
@@ -49,7 +54,7 @@ chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st
 klin get github/klin-lang/klin_st7305@v0.2.0
 klin get github/klin-lang/klin_shtc3@v0.1.0
 klin get github/klin-lang/klin_pcf85063@v0.1.0
-klin get github/klin-lang/waveshare_esp32_s3_rlcd_42@v0.7.0
+klin get github/klin-lang/waveshare_esp32_s3_rlcd_42@v0.8.0
 ```
 
 Or scaffold:
@@ -95,6 +100,28 @@ let _w = board.audio_write(cast(*u8, &pcm[0]), 256)
 let n = board.audio_read(cast(*mut u8, &pcm[0]), 256)
 ```
 
+### Radio (silicon — separate packs)
+
+No board pins / no board `wifi_*` API. Same binary can import board + radio:
+
+```sh
+klin get github/klin-lang/esp_wifi@v0.4.0
+klin get github/klin-lang/esp_ble@v0.10.0
+klin get github/klin-lang/espnow@v0.1.0
+```
+
+```klin
+import "github/klin-lang/esp_wifi" wifi
+import "github/klin-lang/esp_ble" ble
+import "github/klin-lang/espnow" now
+```
+
+| Pack | Role |
+|---|---|
+| [`esp_wifi`](https://github.com/klin-lang/esp_wifi) `@v0.4.0` | STA / SoftAP / scan / link |
+| [`esp_ble`](https://github.com/klin-lang/esp_ble) `@v0.10.0` | NimBLE GAP/GATT + Mesh OnOff |
+| [`espnow`](https://github.com/klin-lang/espnow) `@v0.1.0` | ESP-NOW peer/broadcast (no IP) |
+
 TF slot is **SDMMC**, not SPI — use this pack's `tf_*`, not [`klin_sd_spi`](https://github.com/klin-lang/klin_sd_spi).
 
 ## Contract
@@ -103,11 +130,13 @@ TF slot is **SDMMC**, not SPI — use this pack's `tf_*`, not [`klin_sd_spi`](ht
 - White = bit 1 (`clear` → `0xFF`); black = bit 0.
 - After inserting 18650, connect USB-C once to activate protection (Waveshare FAQ).
 - `audio_init` turns the PA on; call `audio_pa_enable(0)` to mute the amp.
+- Radio stacks are **IDF contracts** in their own packages — not folded into this board.
 
 ## Changelog
 
 | Tag | Notes |
 |---|---|
+| `@v0.8.0` | Document silicon radio via `esp_wifi` / `esp_ble` / `espnow` (no board radio API) |
 | `@v0.7.0` | Audio: I2S duplex + ES8311 DAC + ES7210 ADC + PA (`audio_*`) |
 | `@v0.6.0` | SHTC3 + PCF85063 board glue (`shtc3_measure`, `rtc_read` / `rtc_set`) |
 | `@v0.5.0` | I2C master helper (SDA=13 SCL=14): init/probe/write/read/write_read |
@@ -123,4 +152,7 @@ TF slot is **SDMMC**, not SPI — use this pack's `tf_*`, not [`klin_sd_spi`](ht
 - Chip driver: https://github.com/klin-lang/klin_st7305
 - SHTC3: https://github.com/klin-lang/klin_shtc3
 - RTC: https://github.com/klin-lang/klin_pcf85063
+- Wi‑Fi: https://github.com/klin-lang/esp_wifi
+- BLE: https://github.com/klin-lang/esp_ble
+- ESP-NOW: https://github.com/klin-lang/espnow
 - Waveshare product: https://www.waveshare.com/esp32-s3-rlcd-4.2.htm
