@@ -133,9 +133,67 @@ fn main() {
     return
   }
   let _id = board.i2c_deinit()
+  if board.audio_mclk() != 16 {
+    return
+  }
+  if board.audio_bclk() != 9 {
+    return
+  }
+  if board.audio_ws() != 45 {
+    return
+  }
+  if board.audio_dout() != 8 {
+    return
+  }
+  if board.audio_din() != 10 {
+    return
+  }
+  if board.audio_pa() != 46 {
+    return
+  }
+  if board.audio_es8311_addr() != 24 {
+    return
+  }
+  if board.audio_es7210_addr() != 64 {
+    return
+  }
+  let mut ae = board.audio_init(16000)
+  if ae != 0 {
+    return
+  }
+  if board.audio_ready() != 1 {
+    return
+  }
+  ae = board.audio_set_volume(70)
+  if ae != 0 {
+    return
+  }
+  ae = board.audio_pa_enable(1)
+  if ae != 0 {
+    return
+  }
+  let mut pcm: [8]u8
+  pcm[0] = cast(u8, 0)
+  pcm[1] = cast(u8, 16)
+  pcm[2] = cast(u8, 0)
+  pcm[3] = cast(u8, 0)
+  pcm[4] = cast(u8, 0)
+  pcm[5] = cast(u8, 240)
+  pcm[6] = cast(u8, 0)
+  pcm[7] = cast(u8, 0)
+  ae = board.audio_write(cast(*u8, &pcm[0]), 8)
+  if ae != 0 {
+    return
+  }
+  let mut mic: [8]u8
+  let an = board.audio_read(cast(*mut u8, &mic[0]), 8)
+  if an != 8 {
+    return
+  }
+  let _ad = board.audio_deinit()
   let _mv = board.battery_mv()
   let _v = board.version()
-  if _v != 6 {
+  if _v != 7 {
     return
   }
 }
