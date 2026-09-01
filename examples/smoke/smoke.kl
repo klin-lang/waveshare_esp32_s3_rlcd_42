@@ -61,6 +61,30 @@ fn main() {
     return
   }
   let _u = board.tf_unmount()
+  if board.i2c_sda() != 13 {
+    return
+  }
+  if board.i2c_scl() != 14 {
+    return
+  }
+  let mut ie = board.i2c_init()
+  if ie != 0 {
+    return
+  }
+  if board.i2c_ready() != 1 {
+    return
+  }
+  if board.i2c_probe(0x70) != 1 {
+    return
+  }
+  let mut reg: [1]u8
+  reg[0] = cast(u8, 0)
+  let mut rbuf: [2]u8
+  ie = board.i2c_write_read(0x70, cast(*u8, &reg[0]), 1, cast(*mut u8, &rbuf[0]), 2)
+  if ie != 0 {
+    return
+  }
+  let _id = board.i2c_deinit()
   let _mv = board.battery_mv()
   let _v = board.version()
 }
