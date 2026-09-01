@@ -108,6 +108,47 @@ pub fn flush(fb: []u8): i32 {
     return lcd.flush(fb)
 }
 
+
+pub fn color_black(): i32 {
+    return panel.color_black()
+}
+
+pub fn color_white(): i32 {
+    return panel.color_white()
+}
+
+pub fn font_char_w(): i32 {
+    return panel.font_char_w()
+}
+
+pub fn font_char_h(): i32 {
+    return panel.font_char_h()
+}
+
+pub fn hline(fb: []u8, x: i32, y: i32, w: i32, color: i32): i32 {
+    return panel.hline(fb, x, y, w, color)
+}
+
+pub fn vline(fb: []u8, x: i32, y: i32, h: i32, color: i32): i32 {
+    return panel.vline(fb, x, y, h, color)
+}
+
+pub fn draw_rect(fb: []u8, x: i32, y: i32, w: i32, h: i32, color: i32): i32 {
+    return panel.draw_rect(fb, x, y, w, h, color)
+}
+
+pub fn draw_char(fb: []u8, x: i32, y: i32, ch: i32, fg: i32, bg: i32): i32 {
+    return panel.draw_char(fb, x, y, ch, fg, bg)
+}
+
+pub fn draw_text(fb: []u8, x: i32, y: i32, chars: []i32, fg: i32, bg: i32): i32 {
+    return panel.draw_text(fb, x, y, chars, fg, bg)
+}
+
+pub fn draw_text_n(fb: []u8, x: i32, y: i32, chars: []i32, n: i32, fg: i32, bg: i32): i32 {
+    return panel.draw_text_n(fb, x, y, chars, n, fg, bg)
+}
+
 pub fn battery_adc_raw(): i32 {
     return klin_rlcd_battery_adc_raw()
 }

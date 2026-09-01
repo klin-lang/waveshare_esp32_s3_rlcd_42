@@ -25,6 +25,13 @@ fn main() {
   if e != board.err_ok() {
     return
   }
+  let mut ab: [2]i32
+  ab[0] = 65
+  ab[1] = 66
+  e = board.draw_text(fb[:], 0, 0, ab[:], board.color_black(), board.color_white())
+  if e != board.err_ok() {
+    return
+  }
   e = board.flush(fb[:])
   if e != board.err_ok() {
     return

@@ -10,29 +10,30 @@ Klin issue
 [163](https://github.com/klin-lang/klin/blob/main/issues/163-board-waveshare-esp32-s3-rlcd-42.md) /
 chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st7305.md).
 
-## Status (`@v0.2.1`)
+## Status (`@v0.3.0`)
 
 | API | Notes |
 |---|---|
 | `init` | IDF SPI2 + `klin_st7305.attach` |
 | `clear` / `fill_black` / `set_pixel` / `rect` / `flush` | Caller `[]u8` FB (**15000**) |
+| `hline` / `vline` / `draw_rect` / `draw_text*` | via `klin_st7305@v0.2.0` |
 | `width` / `height` / `fb_len` | 400 / 300 / 15000 |
 | `lcd_*` / `key` / `boot` / `i2c_*` / `battery_gpio` | Pin map |
 | `battery_adc_raw` / `battery_mv` | GPIO4 ADC1 CH3, ÷3 divider |
 
-`version()` → `2` (`@v0.2.x`).
+`version()` → `3`.
 
 ## Requirements
 
 - Klin compiler
-- [`klin_st7305@v0.1.0`](https://github.com/klin-lang/klin_st7305)
+- [`klin_st7305@v0.2.0`](https://github.com/klin-lang/klin_st7305)
 - ESP-IDF **v5.x** (`IDF_PATH`)
 
 ## Install
 
 ```sh
-klin get github/klin-lang/klin_st7305@v0.1.0
-klin get github/klin-lang/waveshare_esp32_s3_rlcd_42@v0.2.1
+klin get github/klin-lang/klin_st7305@v0.2.0
+klin get github/klin-lang/waveshare_esp32_s3_rlcd_42@v0.3.0
 ```
 
 Or scaffold:
@@ -69,6 +70,7 @@ fn app() {
 
 | Tag | Notes |
 |---|---|
+| `@v0.3.0` | Re-export font/UI from `klin_st7305@v0.2.0` |
 | `@v0.2.1` | panel_s3 CMake uses `panel.link` / `bus_idf.c`; Wire data sets DC high |
 | `@v0.2.0` | Panel via `klin_st7305`; board keeps SPI Wire + battery; FB API is `[]u8` |
 | `@v0.1.0` | Monolithic `st7305_idf.c` (pins + panel + battery) |
