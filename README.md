@@ -10,7 +10,7 @@ Klin issue
 [163](https://github.com/klin-lang/klin/blob/main/issues/163-board-waveshare-esp32-s3-rlcd-42.md) /
 chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st7305.md).
 
-## Status (`@v0.2.0`)
+## Status (`@v0.2.1`)
 
 | API | Notes |
 |---|---|
@@ -20,7 +20,7 @@ chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st
 | `lcd_*` / `key` / `boot` / `i2c_*` / `battery_gpio` | Pin map |
 | `battery_adc_raw` / `battery_mv` | GPIO4 ADC1 CH3, ÷3 divider |
 
-`version()` → `2`.
+`version()` → `2` (`@v0.2.x`).
 
 ## Requirements
 
@@ -32,7 +32,7 @@ chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st
 
 ```sh
 klin get github/klin-lang/klin_st7305@v0.1.0
-klin get github/klin-lang/waveshare_esp32_s3_rlcd_42@v0.2.0
+klin get github/klin-lang/waveshare_esp32_s3_rlcd_42@v0.2.1
 ```
 
 Or scaffold:
@@ -69,6 +69,7 @@ fn app() {
 
 | Tag | Notes |
 |---|---|
+| `@v0.2.1` | panel_s3 CMake uses `panel.link` / `bus_idf.c`; Wire data sets DC high |
 | `@v0.2.0` | Panel via `klin_st7305`; board keeps SPI Wire + battery; FB API is `[]u8` |
 | `@v0.1.0` | Monolithic `st7305_idf.c` (pins + panel + battery) |
 

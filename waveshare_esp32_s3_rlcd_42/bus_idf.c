@@ -112,6 +112,7 @@ void klin_rlcd_wire_data(void *ctx, int32_t b)
     if (!s_bus_ready) {
         return;
     }
+    dc_set(1);
     spi_write_byte((uint8_t)(b & 255));
 }
 
@@ -123,6 +124,7 @@ void klin_rlcd_wire_data_n(void *ctx, uint8_t *p, int32_t n)
     if (!s_bus_ready || p == NULL || n <= 0) {
         return;
     }
+    dc_set(1);
     memset(&t, 0, sizeof(t));
     t.length = (size_t)n * 8;
     t.tx_buffer = p;
