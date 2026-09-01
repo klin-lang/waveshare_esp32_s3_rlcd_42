@@ -10,7 +10,7 @@ Klin issue
 [163](https://github.com/klin-lang/klin/blob/main/issues/163-board-waveshare-esp32-s3-rlcd-42.md) /
 chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st7305.md).
 
-## Status (`@v0.3.0`)
+## Status (`@v0.4.0`)
 
 | API | Notes |
 |---|---|
@@ -20,8 +20,10 @@ chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st
 | `width` / `height` / `fb_len` | 400 / 300 / 15000 |
 | `lcd_*` / `key` / `boot` / `i2c_*` / `battery_gpio` | Pin map |
 | `battery_adc_raw` / `battery_mv` | GPIO4 ADC1 CH3, ÷3 divider |
+| `tf_clk` / `tf_cmd` / `tf_d0` | SDMMC 1-bit: 38 / 21 / 39 |
+| `tf_mount` / `tf_unmount` / `tf_ready` / `tf_write` / `tf_read` | IDF SDMMC + VFS Fat at `/sdcard` |
 
-`version()` → `3`.
+`version()` → `4`.
 
 ## Requirements
 
@@ -33,7 +35,7 @@ chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st
 
 ```sh
 klin get github/klin-lang/klin_st7305@v0.2.0
-klin get github/klin-lang/waveshare_esp32_s3_rlcd_42@v0.3.0
+klin get github/klin-lang/waveshare_esp32_s3_rlcd_42@v0.4.0
 ```
 
 Or scaffold:
@@ -60,6 +62,8 @@ fn app() {
 }
 ```
 
+TF slot is **SDMMC**, not SPI — use this pack's `tf_*`, not [`klin_sd_spi`](https://github.com/klin-lang/klin_sd_spi).
+
 ## Contract
 
 - No Klin GC — framebuffer is yours (`[]u8`).
@@ -70,6 +74,7 @@ fn app() {
 
 | Tag | Notes |
 |---|---|
+| `@v0.4.0` | TF SDMMC (CLK=38 CMD=21 D0=39) mount/read/write |
 | `@v0.3.0` | Re-export font/UI from `klin_st7305@v0.2.0` |
 | `@v0.2.1` | panel_s3 CMake uses `panel.link` / `bus_idf.c`; Wire data sets DC high |
 | `@v0.2.0` | Panel via `klin_st7305`; board keeps SPI Wire + battery; FB API is `[]u8` |

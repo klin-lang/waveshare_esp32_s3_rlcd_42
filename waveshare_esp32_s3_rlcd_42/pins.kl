@@ -57,3 +57,23 @@ pub fn lcd_height(): i32 {
 pub fn fb_bytes(): i32 {
     return 15000
 }
+
+/// TF SDMMC CLK (1-bit).
+pub fn tf_clk(): i32 {
+    return 38
+}
+
+/// TF SDMMC CMD.
+pub fn tf_cmd(): i32 {
+    return 21
+}
+
+/// TF SDMMC D0.
+pub fn tf_d0(): i32 {
+    return 39
+}
+
+/// VFS mount point used by `tf_mount`.
+pub fn tf_mount_path(): str {
+    return "/sdcard"
+}
