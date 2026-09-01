@@ -1,10 +1,5 @@
-# Panel clear / bar / flush (ESP32-S3)
+# panel_s3
 
-```sh
-. $IDF_PATH/export.sh
-make emit KLIN=/path/to/klin/bin/klin.dart
-make build
-make flash
-```
+ESP-IDF demo: clear / black bar / flush + battery poll.
 
-After inserting an 18650, connect USB-C once to wake the battery protection circuit.
+Needs `klin_st7305@v0.1.0` and this board `@v0.2.0` in the Klin cache.

@@ -1,16 +1,11 @@
-# Emit-c against package Klin surface (no IDF link).
+# Host emit-c smoke (stubs, no IDF).
+
 KLIN ?= klin
 
-.PHONY: emit clean
-
-emit: out/smoke.c
-
-out/smoke.c: smoke.kl $(wildcard ../../waveshare_esp32_s3_rlcd_42/*.kl)
+.PHONY: emit
+emit:
 	@mkdir -p out
 	@case "$(KLIN)" in \
-	  *.dart) dart run "$(KLIN)" --emit-c smoke.kl ;; \
-	  *) "$(KLIN)" --emit-c smoke.kl ;; \
+	  *.dart) dart run "$(KLIN)" --emit-c -I../../ -Istubs smoke.kl ;; \
+	  *) "$(KLIN)" --emit-c -I../../ -Istubs smoke.kl ;; \
 	esac
-
-clean:
-	rm -rf out

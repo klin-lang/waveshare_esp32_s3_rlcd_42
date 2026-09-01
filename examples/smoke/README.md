@@ -1,4 +1,3 @@
-# Smoke
+# emit-c smoke for waveshare_esp32_s3_rlcd_42 (stubs).
 
-`make emit` runs Klin `--emit-c` against the real module. Full link needs
-ESP-IDF (`examples/panel_s3/`). `stubs/` is a host-compile reference.
+Needs `klin_st7305` in `$KLIN_CACHE` (`klin get github/klin-lang/klin_st7305@v0.1.0`).
