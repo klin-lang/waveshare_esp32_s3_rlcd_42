@@ -4,14 +4,16 @@ Klin board pack for **Waveshare ESP32-S3-RLCD-4.2** — 4.2″ ST7305 reflective
 LCD (400×300) + 18650 battery sense.
 
 Panel protocol lives in [`klin_st7305`](https://github.com/klin-lang/klin_st7305)
-(`Wire`). This pack owns the ESP-IDF SPI bus, I2C master, pin map, TF SDMMC,
-and battery ADC.
+(`Wire`). Sensors: [`klin_shtc3`](https://github.com/klin-lang/klin_shtc3) /
+[`klin_pcf85063`](https://github.com/klin-lang/klin_pcf85063). This pack owns
+the ESP-IDF SPI bus, I2C master, pin map, TF SDMMC, battery ADC, and thin
+sensor glue.
 
 Klin issue
 [163](https://github.com/klin-lang/klin/blob/main/issues/163-board-waveshare-esp32-s3-rlcd-42.md) /
 chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st7305.md).
 
-## Status (`@v0.5.0`)
+## Status (`@v0.6.0`)
 
 | API | Notes |
 |---|---|
@@ -25,20 +27,26 @@ chip driver [164](https://github.com/klin-lang/klin/blob/main/issues/164-klin-st
 | `tf_mount` / `tf_unmount` / `tf_ready` / `tf_write` / `tf_read` | IDF SDMMC + VFS Fat at `/sdcard` |
 | `i2c_init` / `i2c_deinit` / `i2c_ready` / `i2c_probe` | IDF `i2c_master`, SDA=13 SCL=14 @ 100 kHz |
 | `i2c_write` / `i2c_read` / `i2c_write_read` | Caller buffers; 7-bit addr |
+| `shtc3_measure(temp_mC, hum_mRh)` | I2C init + `klin_shtc3` measure |
+| `rtc_read` / `rtc_set` | I2C init + `klin_pcf85063` datetime |
 
-`version()` → `5`.
+`version()` → `6`.
 
 ## Requirements
 
 - Klin compiler
 - [`klin_st7305@v0.2.0`](https://github.com/klin-lang/klin_st7305)
+- [`klin_shtc3@v0.1.0`](https://github.com/klin-lang/klin_shtc3)
+- [`klin_pcf85063@v0.1.0`](https://github.com/klin-lang/klin_pcf85063)
 - ESP-IDF **v5.x** (`IDF_PATH`)
 
 ## Install
 
 ```sh
 klin get github/klin-lang/klin_st7305@v0.2.0
-klin get github/klin-lang/waveshare_esp32_s3_rlcd_42@v0.5.0
+klin get github/klin-lang/klin_shtc3@v0.1.0
+klin get github/klin-lang/klin_pcf85063@v0.1.0
+klin get github/klin-lang/waveshare_esp32_s3_rlcd_42@v0.6.0
 ```
 
 Or scaffold:
@@ -65,11 +73,13 @@ fn app() {
 }
 ```
 
-I2C is a **thin bus** (no SHTC3 / RTC decode yet):
+Sensors (I2C SDA=13 SCL=14):
 
 ```klin
-let mut e = board.i2c_init()
-let p = board.i2c_probe(0x70)
+let mut t: i32 = 0
+let mut h: i32 = 0
+let e = board.shtc3_measure(&t, &h)
+let _ = board.rtc_set(0, 0, 12, 1, 1, 9, 26)
 ```
 
 TF slot is **SDMMC**, not SPI — use this pack's `tf_*`, not [`klin_sd_spi`](https://github.com/klin-lang/klin_sd_spi).
@@ -84,6 +94,7 @@ TF slot is **SDMMC**, not SPI — use this pack's `tf_*`, not [`klin_sd_spi`](ht
 
 | Tag | Notes |
 |---|---|
+| `@v0.6.0` | SHTC3 + PCF85063 board glue (`shtc3_measure`, `rtc_read` / `rtc_set`) |
 | `@v0.5.0` | I2C master helper (SDA=13 SCL=14): init/probe/write/read/write_read |
 | `@v0.4.0` | TF SDMMC (CLK=38 CMD=21 D0=39) mount/read/write |
 | `@v0.3.0` | Re-export font/UI from `klin_st7305@v0.2.0` |
@@ -95,4 +106,6 @@ TF slot is **SDMMC**, not SPI — use this pack's `tf_*`, not [`klin_sd_spi`](ht
 
 - Klin issue: https://github.com/klin-lang/klin/blob/main/issues/163-board-waveshare-esp32-s3-rlcd-42.md
 - Chip driver: https://github.com/klin-lang/klin_st7305
+- SHTC3: https://github.com/klin-lang/klin_shtc3
+- RTC: https://github.com/klin-lang/klin_pcf85063
 - Waveshare product: https://www.waveshare.com/esp32-s3-rlcd-4.2.htm

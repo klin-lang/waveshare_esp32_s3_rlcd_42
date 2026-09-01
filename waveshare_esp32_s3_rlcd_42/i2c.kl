@@ -1,5 +1,5 @@
 /// Onboard I2C master (SDA=13, SCL=14) via ESP-IDF `i2c_master`.
-/// Thin bus only — no SHTC3 / PCF85063 protocol here.
+/// Thin bus; sensor protocol in shtc3.kl / pcf85063.kl glue.
 module waveshare_esp32_s3_rlcd_42
 
 @[link("i2c_idf.c")]
